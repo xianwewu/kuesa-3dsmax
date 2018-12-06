@@ -71,9 +71,10 @@ private:
     std::set<INode *> m_inputNodes;
 };
 
-#define VISIBLE_PRIMITIVE(classname, quotedname) \
-def_visible_primitive(classname, quotedname); \
-Value* classname##_cf(Value **argList, int numArgs) { \
-    classname command(MAXScript_interface, argList, numArgs); \
-    return command.doIt(); \
-}
+#define VISIBLE_PRIMITIVE(classname, quotedname)                  \
+    def_visible_primitive(classname, quotedname);                 \
+    Value *classname##_cf(Value **argList, int numArgs)           \
+    {                                                             \
+        classname command(MAXScript_interface, argList, numArgs); \
+        return command.doIt();                                    \
+    }

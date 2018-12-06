@@ -38,8 +38,7 @@
 class KdabLog
 {
 public:
-    enum class LogLevel
-    {
+    enum class LogLevel {
         kAll = 0,
         kDbg,
         kMsg,

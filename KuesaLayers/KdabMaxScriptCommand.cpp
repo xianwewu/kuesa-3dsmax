@@ -31,7 +31,7 @@
 #include "KdabLog.h"
 
 KdabMaxScriptCommand::KdabMaxScriptCommand(Interface *maxInterface, Value **args, int numArgs)
-  : m_maxInterface(maxInterface)
+    : m_maxInterface(maxInterface)
 {
     m_args = new KdabMaxScriptArguments(args, numArgs);
 }
@@ -67,7 +67,7 @@ void KdabMaxScriptCommand::gatherInputNodes(bool defaultInSelected)
         if (node)
             m_inputNodes.insert(node);
 
-        std::vector<INode*> nodes;
+        std::vector<INode *> nodes;
         bool inNodes = m_args->getNodeArrayByKey(L"inNodes", nodes);
         if (inNodes) {
             for (auto node : nodes)
@@ -87,7 +87,7 @@ void KdabMaxScriptCommand::gatherInputNodes(bool defaultInSelected)
 
     KLOG.getStream() << "gathered " << m_inputNodes.size() << " nodes:";
     KLOG.flushDbg();
-    for (const auto &i: m_inputNodes) {
+    for (const auto &i : m_inputNodes) {
         KLOG.getStream() << L"  " << i->GetName();
         KLOG.flushDbg();
     }
@@ -100,7 +100,7 @@ std::set<INode *> KdabMaxScriptCommand::getInputNodes() const
 
 void KdabMaxScriptCommand::forAllInputNodes(std::function<bool(INode *)> f)
 {
-    for (auto &node: m_inputNodes) {
+    for (auto &node : m_inputNodes) {
         if (!f(node))
             return;
     }

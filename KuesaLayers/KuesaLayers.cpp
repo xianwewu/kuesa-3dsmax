@@ -30,7 +30,7 @@
 
 #include "KuesaLayersCommand.h" // MaxScript command
 
-#define KuesaLayers_CLASS_ID    Class_ID(0x33c27542, 0xd3d8b90f)
+#define KuesaLayers_CLASS_ID Class_ID(0x33c27542, 0xd3d8b90f)
 
 class KuesaLayers : public UtilityObj
 {
@@ -38,7 +38,7 @@ public:
     KuesaLayers();
     ~KuesaLayers();
 
-    virtual void DeleteThis() { }
+    virtual void DeleteThis() {}
 
     virtual void BeginEditParams(Interface *ip, IUtil *iu);
     virtual void EndEditParams(Interface *ip, IUtil *iu);
@@ -47,7 +47,8 @@ public:
     virtual void Destroy(HWND hWnd);
 
     // Singleton access
-    static KuesaLayers *GetInstance() {
+    static KuesaLayers *GetInstance()
+    {
         static KuesaLayers theKuesaLayers;
         return &theKuesaLayers;
     }
@@ -55,26 +56,26 @@ public:
 private:
     static INT_PTR CALLBACK DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-    HWND   hPanel;
+    HWND hPanel;
     IUtil *iu;
 };
-
 
 class KuesaLayersClassDesc : public ClassDesc2
 {
 public:
-    virtual int IsPublic()                             { return TRUE; }
-    virtual void *Create(BOOL /*loading = FALSE*/)     { return KuesaLayers::GetInstance(); }
-    virtual const TCHAR *    ClassName()             { return GetString(IDS_CLASS_NAME); }
-    virtual SClass_ID SuperClassID()                 { return UTILITY_CLASS_ID; }
-    virtual Class_ID ClassID()                         { return KuesaLayers_CLASS_ID; }
-    virtual const TCHAR *Category()                 { return GetString(IDS_CATEGORY); }
+    virtual int IsPublic() { return TRUE; }
+    virtual void *Create(BOOL /*loading = FALSE*/) { return KuesaLayers::GetInstance(); }
+    virtual const TCHAR *ClassName() { return GetString(IDS_CLASS_NAME); }
+    virtual SClass_ID SuperClassID() { return UTILITY_CLASS_ID; }
+    virtual Class_ID ClassID() { return KuesaLayers_CLASS_ID; }
+    virtual const TCHAR *Category() { return GetString(IDS_CATEGORY); }
 
-    virtual const TCHAR *InternalName()             { return _T("KuesaLayers"); }    // returns fixed parsable name (scripter-visible name)
-    virtual HINSTANCE HInstance()                     { return hInstance; }                    // returns owning module handle
+    virtual const TCHAR *InternalName() { return _T("KuesaLayers"); } // returns fixed parsable name (scripter-visible name)
+    virtual HINSTANCE HInstance() { return hInstance; } // returns owning module handle
 };
 
-ClassDesc2 *GetKuesaLayersDesc() {
+ClassDesc2 *GetKuesaLayersDesc()
+{
     static KuesaLayersClassDesc KuesaLayersDesc;
     return &KuesaLayersDesc;
 }
@@ -94,11 +95,11 @@ void KuesaLayers::BeginEditParams(Interface *ip, IUtil *iu)
 {
     this->iu = iu;
     hPanel = ip->AddRollupPage(
-        hInstance,
-        MAKEINTRESOURCE(IDD_PANEL),
-        DlgProc,
-        GetString(IDS_PARAMS),
-        0);
+            hInstance,
+            MAKEINTRESOURCE(IDD_PANEL),
+            DlgProc,
+            GetString(IDS_PARAMS),
+            0);
 }
 
 void KuesaLayers::EndEditParams(Interface *ip, IUtil *)
@@ -110,12 +111,10 @@ void KuesaLayers::EndEditParams(Interface *ip, IUtil *)
 
 void KuesaLayers::Init(HWND /*handle*/)
 {
-
 }
 
 void KuesaLayers::Destroy(HWND /*handle*/)
 {
-
 }
 
 INT_PTR CALLBACK KuesaLayers::DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -130,7 +129,7 @@ INT_PTR CALLBACK KuesaLayers::DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM
         break;
 
     case WM_COMMAND:
-        #pragma message(TODO("React to the user interface commands.  A utility plug-in is controlled by the user from here."))
+#pragma message(TODO("React to the user interface commands.  A utility plug-in is controlled by the user from here."))
         break;
 
     case WM_LBUTTONDOWN:

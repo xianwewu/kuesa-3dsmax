@@ -113,12 +113,13 @@ void KdabProperties::trimSpaceLeft(std::wstring &str)
     str.erase(str.begin(), std::find_if(str.begin(), str.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
 }
 
-void KdabProperties::trimSpaceRight(std::wstring &str) {
+void KdabProperties::trimSpaceRight(std::wstring &str)
+{
     str.erase(std::find_if(str.rbegin(), str.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), str.end());
 }
 
-void KdabProperties::trimSpace(std::wstring &str) {
+void KdabProperties::trimSpace(std::wstring &str)
+{
     trimSpaceLeft(str);
     trimSpaceRight(str);
 }
-

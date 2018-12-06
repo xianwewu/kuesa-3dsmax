@@ -66,7 +66,7 @@ Value *KdabMaxScriptArguments::getValueByKey(const std::wstring &key) const
     auto value = m_keyArgs.find(key);
     if (value == m_keyArgs.end()) {
         dbg << L"not found, available keys:";
-        for (const auto &a: m_keyArgs)
+        for (const auto &a : m_keyArgs)
             dbg << " " << a.first;
         KLOG.flushDbg();
         return nullptr;
@@ -108,7 +108,8 @@ Value *KdabMaxScriptArguments::getArrayValueByKey(const std::wstring &key) const
     Value *value = getValueByKey(key);
     if (!value)
         return nullptr;
-    KLOG.getStream() << L"  value type: " << value->tag->name; KLOG.flushDbg();
+    KLOG.getStream() << L"  value type: " << value->tag->name;
+    KLOG.flushDbg();
     if (value->tag == class_tag(Array)) {
         KLOG.dbg(L"  array identified");
         return value;
@@ -117,7 +118,7 @@ Value *KdabMaxScriptArguments::getArrayValueByKey(const std::wstring &key) const
     return nullptr;
 }
 
-bool KdabMaxScriptArguments::getNodeArrayByKey(const std::wstring &key, std::vector<INode*> &values) const
+bool KdabMaxScriptArguments::getNodeArrayByKey(const std::wstring &key, std::vector<INode *> &values) const
 {
     KLOG.dbg(L"getNodeArrayByKey()...");
     values.clear();

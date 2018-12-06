@@ -40,7 +40,7 @@
 #include "KdabLog.h"
 
 KuesaLayersCommand::KuesaLayersCommand(Interface *maxInterface, Value **args, int numArgs)
-  : KdabMaxScriptCommand(maxInterface, args, numArgs)
+    : KdabMaxScriptCommand(maxInterface, args, numArgs)
 {
 }
 
