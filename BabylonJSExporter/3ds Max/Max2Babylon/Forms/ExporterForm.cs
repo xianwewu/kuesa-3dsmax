@@ -184,7 +184,8 @@ namespace Max2Babylon
                     enableKHRTextureTransform = chkKHRTextureTransform.Checked,
                     enableKHRMaterialsUnlit = chkKHRMaterialsUnlit.Checked,
                     exportMaterials = chkExportMaterials.Checked,
-                    kuesaExportWireFrame = kuesaWireFrameCB.Checked
+                    kuesaExportWireFrame = kuesaWireFrameCB.Checked,
+                    kuesaExportLayers = kuesaLayersCB.Checked
                 };
 
                 exporter.callerForm = this;

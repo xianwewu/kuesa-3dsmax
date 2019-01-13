@@ -265,7 +265,7 @@
             // kuesaWireFrameCB
             // 
             this.kuesaWireFrameCB.AutoSize = true;
-            this.kuesaWireFrameCB.Enabled = false;
+            this.kuesaWireFrameCB.Enabled = true;
             this.kuesaWireFrameCB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.kuesaWireFrameCB.Location = new System.Drawing.Point(332, 502);
             this.kuesaWireFrameCB.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
@@ -279,7 +279,7 @@
             // kuesaLayersCB
             // 
             this.kuesaLayersCB.AutoSize = true;
-            this.kuesaLayersCB.Enabled = false;
+            this.kuesaLayersCB.Enabled = true;
             this.kuesaLayersCB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.kuesaLayersCB.Location = new System.Drawing.Point(36, 502);
             this.kuesaLayersCB.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);

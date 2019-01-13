@@ -536,6 +536,27 @@ namespace Max2Babylon
 
             babylonScene.MeshesList.Add(babylonMesh);
 
+            // Kuesa Layers
+            string kuesaLayers = meshNode.MaxNode.GetStringProperty("kuesa_layers", "");
+            if (kuesaLayers.Length > 0)
+            {
+                RaiseMessage($"Layers: {kuesaLayers}", 2);
+
+                string[] layers = kuesaLayers.Split(';');
+                int[] indexes = new int[layers.Count()];
+                for (int i=0; i<layers.Count(); ++i)
+                {
+                    int j = babylonScene.KuesaLayers.FindIndex(s => s.Equals(layers[i]));
+                    if (j == -1)
+                    {
+                        babylonScene.KuesaLayers.Add(layers[i]);
+                        j = babylonScene.KuesaLayers.Count() - 1;
+                    }
+                    indexes[i] = j;
+                }
+                babylonMesh.kuesaLayers = indexes;
+            }
+
             return babylonMesh;
         }
 

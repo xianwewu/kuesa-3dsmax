@@ -44,5 +44,9 @@ namespace BabylonExport.Entities
 
 		// Animations exported for glTF but not for Babylon
         public List<BabylonAnimation> extraAnimations;
+
+        [DataMember]
+        public int[] kuesaLayers { get; set; }
+
     }
 }

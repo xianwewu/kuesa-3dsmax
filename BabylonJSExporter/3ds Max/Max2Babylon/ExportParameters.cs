@@ -20,5 +20,6 @@
         public bool enableKHRTextureTransform = false;
         public bool enableKHRMaterialsUnlit = false;
         public bool kuesaExportWireFrame = false;
+        public bool kuesaExportLayers = false;
     }
 }

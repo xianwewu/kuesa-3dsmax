@@ -118,6 +118,8 @@ namespace BabylonExport.Entities
         public List<BabylonShadowGenerator> ShadowGeneratorsList { get; private set; }
         public List<BabylonSkeleton> SkeletonsList { get; private set; }
         public List<BabylonMorphTargetManager> MorphTargetManagersList { get; private set; }
+        
+        public List<string> KuesaLayers { get; set; }
 
         public BabylonScene(string outputPath)
         {
@@ -141,6 +143,8 @@ namespace BabylonExport.Entities
 
             MaxVector = new BabylonVector3 { X = float.MinValue, Y = float.MinValue, Z = float.MinValue };
             MinVector = new BabylonVector3 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue };
+
+            KuesaLayers = new List<string>();
         }
 
         public void Prepare(bool generateDefaultLight = true, bool generateDefaultCamera = true)

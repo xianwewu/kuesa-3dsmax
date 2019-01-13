@@ -13,6 +13,7 @@ using System.Diagnostics;
 
 namespace Max2Babylon
 {
+
     internal partial class BabylonExporter
     {
         List<BabylonMaterial> babylonMaterialsToExport;
@@ -60,7 +61,7 @@ namespace Max2Babylon
 #elif MAX2019
             maxVersion = "2019";
 #endif
-         gltf.asset.generator = $"babylon.js glTF exporter for 3ds max {maxVersion} v{exporterVersion}";
+            gltf.asset.generator = $"babylon.js glTF exporter for 3ds max {maxVersion} v{exporterVersion}";
 
             // Scene
             gltf.scene = 0;
@@ -112,6 +113,23 @@ namespace Max2Babylon
             // Animations
             RaiseMessage("GLTFExporter | Exporting Animations");
             ExportAnimationGroups(gltf, babylonScene);
+
+            // Kuesa Layers
+            if (exportParameters.kuesaExportLayers && babylonScene.KuesaLayers.Count() > 0)
+            {
+                if (gltf.extensionsUsed == null)
+                {
+                    gltf.extensionsUsed = new System.Collections.Generic.List<string>();
+                }
+                if (!gltf.extensionsUsed.Contains("KDAB_Kuesa_Layers"))
+                {
+                    gltf.extensionsUsed.Add("KDAB_Kuesa_Layers");
+                }
+
+                Dictionary<string, string[]> layers = new Dictionary<string, string[]>();
+                layers["layers"] = babylonScene.KuesaLayers.ToArray();
+                gltf.extensions["KDAB_Kuesa_Layers"] = layers;
+            }
 
             // Prepare buffers
             gltf.BuffersList.ForEach(buffer =>
@@ -523,6 +541,20 @@ namespace Max2Babylon
             gltfNode.translation[2] *= -1;
             gltfNode.rotation[0] *= -1;
             gltfNode.rotation[1] *= -1;
+
+            // Kuesa layers
+            if (exportParameters.kuesaExportLayers && babylonNode.kuesaLayers != null)
+            {
+                Dictionary<string, List<int>> layers = new Dictionary<string, List<int>>();
+                List<int> indexes = babylonNode.kuesaLayers.ToList<int>();
+                layers["layers"] = new List<int>();
+                layers["layers"].AddRange(indexes);
+                if (gltfNode.extensions == null)
+                {
+                    gltfNode.extensions = new GLTFExtensions();
+                }
+                gltfNode.extensions["KDAB_Kuesa_Layers"] = layers;
+            }
 
             return gltfNode;
         }
