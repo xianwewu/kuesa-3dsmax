@@ -123,9 +123,8 @@ Value *KuesaLayersCommand::doIt()
             if (gatheredLayerNames.find(layerName) != gatheredLayerNames.end())
             {
                 numFound += 1;
-                if (numFound > 1 && numTraversed < numFound) {
+                if (numFound > 1 && numTraversed < numFound)
                     return false;
-                }
             }
             return true;
         });
