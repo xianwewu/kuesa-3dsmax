@@ -40,7 +40,7 @@
 #include "KdabLog.h"
 
 KuesaLayersCommand::KuesaLayersCommand(Interface *maxInterface, Value **args, int numArgs)
-  : KdabMaxScriptCommand(maxInterface, args, numArgs)
+    : KdabMaxScriptCommand(maxInterface, args, numArgs)
 {
 }
 
@@ -48,22 +48,22 @@ Value *KuesaLayersCommand::doIt()
 {
     KLOG.dbg(L"KuesaLayersCommand::doIt()");
 
+    // Gather input nodes for specified actions.
     gatherInputNodes(false);
-    // Gathers input nodes for specified actions...
 
     std::wstring layerName;
     std::vector<std::wstring> layerNames;
     bool foundKey = false;
     layerName = getArgs()->getStringByKey(L"addLayer", foundKey);
-    // Adds specified layer to input nodes.
+    // Add specified layer to input nodes.
     if (foundKey) {
         forAllInputNodes([this, &layerName](INode *node) {
             addLayerToNode(node, layerName);
             return true;
         });
     }
+    // Add specified layers to input nodes.
     if (getArgs()->getStringArrayByKey(L"addLayers", layerNames)) {
-    // Adds specified layers to input nodes.
         forAllInputNodes([this, &layerNames](INode *node) {
             for (const auto &layerName : layerNames)
                 addLayerToNode(node, layerName);
@@ -71,15 +71,15 @@ Value *KuesaLayersCommand::doIt()
         });
     }
     layerName = getArgs()->getStringByKey(L"delLayer", foundKey);
-    // Removes specified layer from input nodes.
+    // Remove specified layer from input nodes.
     if (foundKey) {
         forAllInputNodes([this, &layerName](INode *node) {
             delLayerFromNode(node, layerName);
             return true;
         });
     }
+    // Remove specified layers from input nodes.
     if (getArgs()->getStringArrayByKey(L"delLayers", layerNames)) {
-    // Removes specified layers from input nodes.
         forAllInputNodes([this, &layerNames](INode *node) {
             for (const auto &layerName : layerNames)
                 delLayerFromNode(node, layerName);
@@ -87,8 +87,8 @@ Value *KuesaLayersCommand::doIt()
         });
     }
 
+    // Get all layer names from input nodes and returns as string array.
     if (getArgs()->getValueByKey(L"getLayers")) {
-    // Gets all layer names from input nodes and returns as string array.
         std::set<std::wstring> gatheredLayerNames;
         forAllInputNodes([this, &gatheredLayerNames](INode *node) {
             gatherLayersFromNodeAppend(node, gatheredLayerNames);
@@ -109,7 +109,7 @@ Value *KuesaLayersCommand::doIt()
     }
 
     layerName = getArgs()->getStringByKey(L"haveLayer", foundKey);
-    // Checks if the input nodes have then specified layer. Result:
+    // Check if the input nodes have then specified layer. Result:
     // "none": None of the nodes have that layer.
     // "some": Some of the nodes have that layer but not all.
     // "all":  All of the nodes have that layer.
@@ -139,7 +139,7 @@ Value *KuesaLayersCommand::doIt()
     }
 
     layerName = getArgs()->getStringByKey(L"selectWithLayer", foundKey);
-    // Selects all nodes with specified layer.
+    // Select all nodes with specified layer.
     if (foundKey) {
         getMaxInterface()->ClearNodeSelection();
         traverseSceneNodes([this, &layerName](INode *node, int depth) {
@@ -153,14 +153,15 @@ Value *KuesaLayersCommand::doIt()
     }
 
     layerName = getArgs()->getStringByKey(L"replaceLayer", foundKey);
-    // Replaces layer specified by 'replaceLayer' of input nodes by layer specified by 'replaceBy'.
+    // Replace layer specified by 'replaceLayer' of input nodes by layer specified by 'replaceBy'.
     if (foundKey) {
         std::wstring newLayerName = getArgs()->getStringByKey(L"replaceBy", foundKey);
         if (foundKey) {
             forAllInputNodes([this, &layerName, &newLayerName](INode *node) {
                 std::set<std::wstring> gatheredLayerNames;
                 gatherLayersFromNodeAppend(node, gatheredLayerNames);
-                if (gatheredLayerNames.find(layerName) != gatheredLayerNames.end() && gatheredLayerNames.find(newLayerName) == gatheredLayerNames.end())
+                if (gatheredLayerNames.find(layerName) != gatheredLayerNames.end() &&
+                    gatheredLayerNames.find(newLayerName) == gatheredLayerNames.end())
                 {
                     delLayerFromNode(node, layerName);
                     addLayerToNode(node, newLayerName);
@@ -171,7 +172,7 @@ Value *KuesaLayersCommand::doIt()
     }
 
     layerName = getArgs()->getStringByKey(L"getObjectsWithLayer", foundKey);
-    // Returns an array of all objects with specified layer.
+    // Return an array of all objects with specified layer.
     if (foundKey) {
         std::set<INode*> nodes;
         traverseSceneNodes([this, &layerName, &nodes](INode *node, int depth) {
