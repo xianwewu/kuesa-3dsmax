@@ -40,7 +40,7 @@
 #include "KdabLog.h"
 
 KuesaLayersCommand::KuesaLayersCommand(Interface *maxInterface, Value **args, int numArgs)
-    : KdabMaxScriptCommand(maxInterface, args, numArgs)
+  : KdabMaxScriptCommand(maxInterface, args, numArgs)
 {
 }
 
@@ -49,11 +49,13 @@ Value *KuesaLayersCommand::doIt()
     KLOG.dbg(L"KuesaLayersCommand::doIt()");
 
     gatherInputNodes(false);
+    // Gathers input nodes for specified actions...
 
     std::wstring layerName;
     std::vector<std::wstring> layerNames;
     bool foundKey = false;
     layerName = getArgs()->getStringByKey(L"addLayer", foundKey);
+    // Adds specified layer to input nodes.
     if (foundKey) {
         forAllInputNodes([this, &layerName](INode *node) {
             addLayerToNode(node, layerName);
@@ -61,6 +63,7 @@ Value *KuesaLayersCommand::doIt()
         });
     }
     if (getArgs()->getStringArrayByKey(L"addLayers", layerNames)) {
+    // Adds specified layers to input nodes.
         forAllInputNodes([this, &layerNames](INode *node) {
             for (const auto &layerName : layerNames)
                 addLayerToNode(node, layerName);
@@ -68,6 +71,7 @@ Value *KuesaLayersCommand::doIt()
         });
     }
     layerName = getArgs()->getStringByKey(L"delLayer", foundKey);
+    // Removes specified layer from input nodes.
     if (foundKey) {
         forAllInputNodes([this, &layerName](INode *node) {
             delLayerFromNode(node, layerName);
@@ -75,6 +79,7 @@ Value *KuesaLayersCommand::doIt()
         });
     }
     if (getArgs()->getStringArrayByKey(L"delLayers", layerNames)) {
+    // Removes specified layers from input nodes.
         forAllInputNodes([this, &layerNames](INode *node) {
             for (const auto &layerName : layerNames)
                 delLayerFromNode(node, layerName);
@@ -83,6 +88,7 @@ Value *KuesaLayersCommand::doIt()
     }
 
     if (getArgs()->getValueByKey(L"getLayers")) {
+    // Gets all layer names from input nodes and returns as string array.
         std::set<std::wstring> gatheredLayerNames;
         forAllInputNodes([this, &gatheredLayerNames](INode *node) {
             gatherLayersFromNodeAppend(node, gatheredLayerNames);
@@ -100,6 +106,94 @@ Value *KuesaLayersCommand::doIt()
             ++count;
         }
         return_value(a);
+    }
+
+    layerName = getArgs()->getStringByKey(L"haveLayer", foundKey);
+    // Checks if the input nodes have then specified layer. Result:
+    // "none": None of the nodes have that layer.
+    // "some": Some of the nodes have that layer but not all.
+    // "all":  All of the nodes have that layer.
+    if (foundKey) {
+        int numTraversed = 0;
+        int numFound = 0;
+        forAllInputNodes([this, &layerName, &numTraversed, &numFound](INode *node) {
+            numTraversed += 1;
+            std::set<std::wstring> gatheredLayerNames;
+            gatherLayersFromNodeAppend(node, gatheredLayerNames);
+            if (gatheredLayerNames.find(layerName) != gatheredLayerNames.end())
+            {
+                numFound += 1;
+                if (numFound > 1 && numTraversed < numFound) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        one_typed_value_local(String* occurence);
+        if (numFound == 0)
+            vl.occurence = new String(L"none");
+        else if (numFound == numTraversed)
+            vl.occurence = new String(L"all");
+        else
+            vl.occurence = new String(L"some");
+        return_value(vl.occurence);
+    }
+
+    layerName = getArgs()->getStringByKey(L"selectWithLayer", foundKey);
+    // Selects all nodes with specified layer.
+    if (foundKey) {
+        getMaxInterface()->ClearNodeSelection();
+        traverseSceneNodes([this, &layerName](INode *node, int depth) {
+            (void)depth;
+            std::set<std::wstring> gatheredLayerNames;
+            gatherLayersFromNodeAppend(node, gatheredLayerNames);
+            if (gatheredLayerNames.find(layerName) != gatheredLayerNames.end())
+                getMaxInterface()->SelectNode(node, 0);
+            return true;
+        });
+    }
+
+    layerName = getArgs()->getStringByKey(L"replaceLayer", foundKey);
+    // Replaces layer specified by 'replaceLayer' of input nodes by layer specified by 'replaceBy'.
+    if (foundKey) {
+        std::wstring newLayerName = getArgs()->getStringByKey(L"replaceBy", foundKey);
+        if (foundKey) {
+            forAllInputNodes([this, &layerName, &newLayerName](INode *node) {
+                std::set<std::wstring> gatheredLayerNames;
+                gatherLayersFromNodeAppend(node, gatheredLayerNames);
+                if (gatheredLayerNames.find(layerName) != gatheredLayerNames.end() && gatheredLayerNames.find(newLayerName) == gatheredLayerNames.end())
+                {
+                    delLayerFromNode(node, layerName);
+                    addLayerToNode(node, newLayerName);
+                }
+                return true;
+            });
+        }
+    }
+
+    layerName = getArgs()->getStringByKey(L"getObjectsWithLayer", foundKey);
+    // Returns an array of all objects with specified layer.
+    if (foundKey) {
+        std::set<INode*> nodes;
+        traverseSceneNodes([this, &layerName, &nodes](INode *node, int depth) {
+            (void)depth;
+            std::set<std::wstring> gatheredLayerNames;
+            gatherLayersFromNodeAppend(node, gatheredLayerNames);
+            if (gatheredLayerNames.find(layerName) != gatheredLayerNames.end())
+                nodes.insert(node);
+            return true;
+        });
+        Value **maxValues;
+        value_local_array(maxValues, nodes.size() + 1);
+        maxValues[nodes.size() - 1] = new Array(static_cast<int>(nodes.size()));
+        Array *maxArray = static_cast<Array *>(maxValues[nodes.size() - 1]);
+        int count = 0;
+        for (const auto &node : nodes) {
+            maxValues[count] = new String(node->GetName()); //todo: do we want to return nodes instead of strings?
+            maxArray->append(maxValues[count]);
+            ++count;
+        }
+        return_value(maxArray);
     }
 
     return &ok;

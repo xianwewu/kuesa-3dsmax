@@ -176,4 +176,5 @@ obj
 *.swatches
 assemblies
 /Maya/Assemblies/*.dll
+*.pyc
 

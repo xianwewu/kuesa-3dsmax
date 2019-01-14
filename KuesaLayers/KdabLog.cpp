@@ -36,7 +36,7 @@ KdabLog &KdabLog::getInstance()
 
 KdabLog::KdabLog()
     : m_maxInterface(MAXScript_interface)
-    , m_logLevel(LogLevel::kAll)
+    , m_logLevel(LogLevel::kMsg)
 {
 }
 
