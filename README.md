@@ -28,17 +28,14 @@ Please set the following environment variables, adjusting paths to match your in
 * Open Visual Studio, as administrator
 * Open `KuesaPlugins.sln`
 * If prompted, make sure is used `v140` build tools and `10.0.10586.0` SDK
+* Build 'Max2Babylon2019'. This will build the exporter and install it directly to 3DS Max.
+* Build 'KuesaLayers'. This will build the Kuesa Layers Manager into a subfolder of the deploy folder.
 
-# Installing Kuesa Plugins For 3DS Max
+## Installing Kuesa Plugins For 3DS Max
 
-## Install the exporter
-Unless you want to use Kuesa specific features, this is what you need to export .gltf files.
-* Put KuesaMax2Babylon.dll into <...3dsMax>/bin/assemblies/
-
-## Install additional plugins
-The 'deploy' folder contains startup scripts for Kuesa plugins.
+* Build both projects as explained above
 * In 3DS Max under 'Customize' choose 'Cofigure System Paths...'
-* Choose '3rd Party Plug-Ins'
-* Click 'Add...' and choose <...deploy>/Kuesa
-
-## Restart 3DS Max.
+* Choose '3rd Party Plug-Ins' tab
+* Click 'Add...' and choose '...deploy/Kuesa/' (part of this repo)
+* Restart 3DS Max!
+* You'll find the Kuesa plugins in the main menu under 'Kuesa'
