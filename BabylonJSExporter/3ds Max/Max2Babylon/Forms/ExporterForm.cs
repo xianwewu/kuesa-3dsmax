@@ -185,7 +185,8 @@ namespace Max2Babylon
                     enableKHRMaterialsUnlit = chkKHRMaterialsUnlit.Checked,
                     exportMaterials = chkExportMaterials.Checked,
                     kuesaExportWireFrame = kuesaWireFrameCB.Checked,
-                    kuesaExportLayers = kuesaLayersCB.Checked
+                    kuesaExportLayers = kuesaLayersCB.Checked,
+                    kuesaContQuats = kuesaContQuatCB.Checked
                 };
 
                 exporter.callerForm = this;
@@ -413,6 +414,11 @@ namespace Max2Babylon
         }
 
         private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged_3(object sender, EventArgs e)
         {
 
         }

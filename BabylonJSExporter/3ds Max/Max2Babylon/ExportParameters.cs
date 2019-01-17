@@ -21,5 +21,6 @@
         public bool enableKHRMaterialsUnlit = false;
         public bool kuesaExportWireFrame = false;
         public bool kuesaExportLayers = false;
+        public bool kuesaContQuats = true;
     }
 }

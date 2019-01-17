@@ -6,6 +6,49 @@ using Autodesk.Max;
 
 namespace Max2Babylon
 {
+    class QuatCorrection
+    {
+        private bool initialized;
+
+        private BabylonQuaternion quat;
+        public BabylonQuaternion Quat
+        {
+            set
+            {
+                if (!initialized)
+                {
+                    quat = value;
+                    initialized = true;
+                }
+                else
+                {
+                    BabylonQuaternion valueNeg = new BabylonQuaternion(-value.X, -value.Y, -value.Z, -value.W);
+                    if (dQuat2(quat, value) <= dQuat2(quat, valueNeg))
+                    {
+                        quat = value;
+                    }
+                    else
+                    {
+                        quat = valueNeg;
+                    }
+                }
+            }
+            get
+            {
+                return quat;
+            }
+        }
+
+        static float dQuat2(BabylonQuaternion q1, BabylonQuaternion q2)
+        {
+            float dX = q2.X - q1.X;
+            float dY = q2.Y - q1.Y;
+            float dZ = q2.Z - q1.Z;
+            float dW = q2.W - q1.W;
+            return dX * dX + dY * dY + dZ * dZ + dW * dW;
+        }
+    }
+
     partial class BabylonExporter
     {
         private AnimationGroupList InitAnimationGroups()
@@ -226,6 +269,7 @@ namespace Max2Babylon
 
                     // Populate accessor
                     int numKeys = 0;
+                    QuatCorrection quatCorr = new QuatCorrection(); // restart correction for each curve
                     foreach (var babylonAnimationKey in babylonAnimation.keys)
                     {
                         if (babylonAnimationKey.frame < startFrame)
@@ -247,6 +291,15 @@ namespace Max2Babylon
                         }
                         else if (babylonAnimation.property == "rotationQuaternion")
                         {
+                            quatCorr.Quat = new BabylonQuaternion(outputValues[0], outputValues[1], outputValues[2], outputValues[3]);
+                            if (exportParameters.kuesaContQuats)
+                            {
+                                quatCorr.Quat = new BabylonQuaternion(outputValues[0], outputValues[1], outputValues[2], outputValues[3]);
+                                outputValues[0] = quatCorr.Quat.X;
+                                outputValues[1] = quatCorr.Quat.Y;
+                                outputValues[2] = quatCorr.Quat.Z;
+                                outputValues[3] = quatCorr.Quat.W;
+                            }
                             outputValues[0] *= -1;
                             outputValues[1] *= -1;
                         }
@@ -341,6 +394,7 @@ namespace Max2Babylon
                 }
 
                 // Populate accessors
+                QuatCorrection quatCorr = new QuatCorrection(); // restart correction for each curve
                 foreach (var babylonAnimationKey in babylonAnimation.keys)
                 {
                     if (babylonAnimationKey.frame < startFrame)
@@ -358,6 +412,11 @@ namespace Max2Babylon
                     matrix.decompose(scaleBabylon, rotationQuatBabylon, translationBabylon);
 
                     translationBabylon.Z *= -1;
+                    if (exportParameters.kuesaContQuats)
+                    {
+                        quatCorr.Quat = rotationQuatBabylon;
+                        rotationQuatBabylon = quatCorr.Quat;
+                    }
                     rotationQuatBabylon.X *= -1;
                     rotationQuatBabylon.Y *= -1;
 
