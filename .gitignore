@@ -178,4 +178,4 @@ obj
 assemblies
 /Maya/Assemblies/*.dll
 *.pyc
-
+deploy/Output/*
